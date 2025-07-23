@@ -12,7 +12,9 @@ from modules.study_plan import generate_study_plan
 from modules.resource_recommender import search_wikipedia, get_google_scholar_resources, get_arxiv_papers
 from modules.docx_exporter import export_docx
 
-load_dotenv()
+# Load .env only in local dev
+if not st.secrets:
+    load_dotenv()
 
 st.set_page_config("Smart Learning Companion 2.0", layout="wide")
 st.title("📚 Smart Learning Companion\u00a02.0")
