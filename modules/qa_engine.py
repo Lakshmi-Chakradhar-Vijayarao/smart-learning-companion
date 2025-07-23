@@ -1,10 +1,16 @@
 # ✅ qa_engine.py
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+#load_dotenv()
+#client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+from openai import OpenAI
+import streamlit as st
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 
 def ask_question(text: str, question: str) -> str:
     prompt = f"""
