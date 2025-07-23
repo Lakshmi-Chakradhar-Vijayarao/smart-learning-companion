@@ -1,10 +1,17 @@
 # ✅ study_plan.py
 import os
+import streamlit as st
 from openai import OpenAI
 from dotenv import load_dotenv
 
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Load local .env only if not running in Streamlit Cloud
+if not st.secrets:
+    load_dotenv()
+
+# Use Streamlit secrets if available, else fallback to os.getenv
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=OPENAI_API_KEY)
+
 
 def generate_study_plan(topic: str, hours_per_day=2, goal="exam") -> str:
     prompt = f"""
