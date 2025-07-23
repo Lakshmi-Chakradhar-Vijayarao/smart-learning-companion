@@ -1,11 +1,21 @@
 # ✅ summarizer.py (Hugging Face only)
+import os
+import streamlit as st
+from dotenv import load_dotenv
 from transformers import pipeline
 
-# Force CPU for HF summarizer (MPS/Metal issues with BART models)
+# Load .env for local dev
+load_dotenv()
+
+# Load HF token from Streamlit secrets or fallback
+HF_TOKEN = st.secrets.get("HF_TOKEN", os.getenv("HF_TOKEN"))
+
+# Initialize summarizer with token and forced CPU
 hf_summarizer = pipeline(
     "summarization",
     model="sshleifer/distilbart-cnn-12-6",
-    device=-1
+    device=-1,
+    token=HF_TOKEN
 )
 
 # ──────────────── Utility: Word-aware chunking ────────────────
@@ -35,7 +45,10 @@ def summarize_text(text: str) -> str:
     for chunk in chunks:
         if len(chunk.split()) < 40:
             continue
-        result = hf_summarizer(chunk, max_length=130, min_length=40, do_sample=False)
-        results.append(result[0]["summary_text"].strip())
+        try:
+            result = hf_summarizer(chunk, max_length=130, min_length=40, do_sample=False)
+            results.append(result[0]["summary_text"].strip())
+        except Exception as e:
+            results.append(f"[Summarization failed: {str(e)}]")
 
     return " ".join(results).strip() or "⚠️ Text too short for summarization."
