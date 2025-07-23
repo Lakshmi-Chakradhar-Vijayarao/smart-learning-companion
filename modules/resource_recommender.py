@@ -2,6 +2,11 @@ import os
 import requests
 import feedparser
 import urllib.parse
+import streamlit as st
+
+# Fallback to os.environ if running locally
+SERPAPI_KEY = st.secrets.get("SERPAPI_KEY", os.getenv("SERPAPI_KEY"))
+
 
 # ─────────────── Wikipedia Summary ───────────────
 def search_wikipedia(query):
@@ -16,6 +21,7 @@ def search_wikipedia(query):
     except Exception:
         pass
     return "Wikipedia search failed.", ""
+
 
 # ─────────────── arXiv API ───────────────
 def get_arxiv_papers(query):
@@ -38,15 +44,15 @@ def get_arxiv_papers(query):
     except Exception:
         return []
 
+
 # ─────────────── Google Scholar via SerpAPI ───────────────
 def get_google_scholar_resources(query):
-    serpapi_key = os.getenv("SERPAPI_KEY")
     url = "https://serpapi.com/search"
 
     params = {
         "engine": "google_scholar",
         "q": query,
-        "api_key": serpapi_key,
+        "api_key": SERPAPI_KEY,
         "num": 5
     }
 
