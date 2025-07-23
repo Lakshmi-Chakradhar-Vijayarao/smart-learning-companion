@@ -1,15 +1,19 @@
 # ✅ vocab_helper.py
 import os
+import streamlit as st
 from openai import OpenAI
 from dotenv import load_dotenv
 from transformers import pipeline
 
-load_dotenv()
+# Load environment variables only in local dev
+if not st.secrets:
+    load_dotenv()
 
-# OpenAI client for keyword extraction
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Get OpenAI API key from Streamlit secrets or fallback to env
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=OPENAI_API_KEY)
 
-# HF pipeline for explaining terms (local, no API)
+# HF pipeline for local explanation (no API call)
 explain_pipe = pipeline("text2text-generation", model="google/flan-t5-base", device=-1)
 
 # ─────────────────────────────────────────────────────
