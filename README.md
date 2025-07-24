@@ -7,7 +7,6 @@ Your personalized study assistant powered by **Transformers**, **Whisper**, and 
 ## 🚀 Demo
 
 🌐 **Live App**: [Click to launch](https://lakshmi-chakradhar-vijayarao-smart-learning-companion.streamlit.app)  
-📽️ **Demo Video**: [Watch Demo](#) *(Replace with actual video link)*
 
 ---
 
